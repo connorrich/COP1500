@@ -19,33 +19,35 @@ window.geometry('1000x1000')
 lbl = Label(window, text="Hello, Welcome to Blackjack!", font=("Times New Roman", 20))
 lbl.grid(column=250, row=250)
 
-# Creating the deck and player & dealer hands
-deck = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K', 'A'] * 4
-playerHand = []
-dealerHand = []
-player = True
-dealer = True
 
 def Game():
     print(
         "##########################################\n           Welcome To Blackjack\n      The Goal is to beat the" +
         " dealer\n##########################################")
 
+
 Game()
+
+# Creating the deck and player & dealer hands
+deck = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K', 'A'] * 4
+playerHand = []
+dealerHand = []
+playerTurn = True
+dealerTurn = True
+
+
+# Creating new deck if deck runs out
+def checkDeck(deck):
+    if len(deck) == 0:
+        deck = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K', 'A'] * 4
+    else:
+        return deck
 
 
 # Dealing hand function
 
 def dealHand(turn):
     card = random.choice(deck)
-    if card == 11:
-        card = "J"
-    if card == 12:
-        card = "Q"
-    if card == 13:
-        card = "K"
-    if card == 14:
-        card = "A"
     turn.append(card)
     deck.remove(card)
 
@@ -69,54 +71,53 @@ def handTotal(turn):
 def showDealerHand():
     if len(dealerHand) == 2:
         return dealerHand[0]
-    if dealerHand[0] == "A" or 14:
+    if dealerHand[0] == "A":
         insurance = input("Would you like insurance for a double of your bet? (y/n)")
         if insurance == 'y':
-            if handTotal(dealer) == 21:
+            if handTotal(dealerHand) == 21:
                 print("Dealer has blackjack.")
-                    #Need to find a way to call back to the beginning of the game and deal new hands
-                    #Also figure out why this isnt displaying when dealer has an Ace
-    elif len(dealerHand) > 2:
+    # Need to find a way to call back to the beginning of the game and deal new hands
+    elif len(dealerHand) > 2:  # This basically means that it is the dealers turn
         return dealerHand[0], dealerHand[1]
 
+
 for i in range(2):
-        dealHand(playerHand)
-        dealHand(dealerHand)
+    dealHand(playerHand)
+    dealHand(dealerHand)
 
 
-while player or dealer:
+def main(playerTurn, dealerTurn):
+    while playerTurn or dealerTurn:
         print(f"Dealer has {showDealerHand()}")
         print(f"You have {playerHand}")
         playerAction = input("What is your action\nStay, Hit, Fold (s/h/f)")
-        if player:
-            if playerAction == "s":
-                player = True
-                print(f"You have {playerHand}")
-            elif playerAction == "h":
-                player = True
-                dealHand(playerHand)
-                print(f"You have {playerHand}")
-            elif playerAction == "f":
-                player = False
-                print("Dealer wins... dealing next hand.")
-            else:
-               print("Please enter a valid action")
-        if handTotal(dealerHand) > 16:
-            dealer = False
-        else:
-            dealHand(dealerHand)
-
         if playerAction == "s":
-            player = True
+            playerTurn = False
+            print(f"Dealer has {handTotal(dealerHand)}")
+            print(f"You have {handTotal(playerHand)}")
         elif playerAction == "h":
-            player = True
+            playerTurn = True
             dealHand(playerHand)
+            if handTotal(playerHand) > 21:
+                print("You busted... dealing next hand")
+                dealerHand.clear()
+                playerHand.clear()
+            else:
+                print(playerHand)
         elif playerAction == "f":
-            player = False
+            playerTurn = False
+            print("##########################################\n         Dealer wins... dealing next hand." +
+                  "\n##########################################")
+            dealerHand.clear()
+            playerHand.clear()
+            for i in range(2):
+                dealHand(playerHand)
+                dealHand(dealerHand)
         else:
             print("Please enter a valid action")
 
 
+main(playerTurn, dealerTurn)
 """
 CashBalance = float(input("Enter in your buy in: "))
 HandsLeft = CashBalance // 2
@@ -143,4 +144,4 @@ print("Study", "play", sep = ' and ')
 """
 
 # this makes the GUI window appear
-window.mainloop()
+# window.mainloop()
