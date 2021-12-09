@@ -1,12 +1,12 @@
+__author__ = "Connor Richardson"
 """
-Connor Richardson
 COP 1500
 Prof. Osheroff
-
 This is a early form of a blackjack game
-
 This helped with learning
 https://www.w3schools.com/python/
+I also looked into Derek Banas
+His tutorials helped alot
 """
 
 import random
@@ -19,6 +19,7 @@ playerTurn = True
 dealerTurn = True
 aceSoft = False
 
+
 def checkDeck():
     """
     Creating new deck if deck runs out
@@ -26,7 +27,6 @@ def checkDeck():
     global deck
     if len(deck) <= 20:
         deck = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K', 'A'] * 4
-
 
 
 def hit(turn):
@@ -66,7 +66,6 @@ def dealHand():
     hit(dealerHand)
 
 
-
 def handTotal(turn):
     """
     Calculating the total of the dealer and players hands
@@ -76,6 +75,7 @@ def handTotal(turn):
     global aceSoft
     total = 0
     for card in turn:
+        # This is for determining the value of the cards
         if card in range(1, 11):
             total += card
         elif card == "J" or card == "Q" or card == "K":
