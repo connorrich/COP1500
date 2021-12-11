@@ -122,7 +122,7 @@ def Game():
             print("Dealing next hand...\n")
             dealHand()
         else:
-            playerAction = input("\nStay or Hit (s/h): ")
+            playerAction = input("\nStay or Hit (s/h or q to leave): ")
             if playerAction == "s":
                 playerTurn = False
                 print(f"Dealer has {handTotal(dealerHand)}")
@@ -136,6 +136,9 @@ def Game():
                     print("You busted... dealing next hand\n")
                     checkDeck()
                     dealHand()
+            elif playerAction == "q":
+                print("Thank you for playing, see you soon...")
+                exit()
             else:
                 print("Please enter a valid action")
 
